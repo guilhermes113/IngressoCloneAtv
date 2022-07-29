@@ -1,4 +1,4 @@
-﻿@model IngressoMVC.Models.Categoria
+﻿@model IngressoMVC.Models.ViewModels.ResponseDTO.GetCategoriaDto
 
 @{
     ViewData["Title"] = "Detalhes";
@@ -10,21 +10,6 @@
     <h4>Categoria</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DataCadastro)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DataCadastro)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DataAlteracao)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DataAlteracao)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Nome)
-        </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Nome)
         </dd>

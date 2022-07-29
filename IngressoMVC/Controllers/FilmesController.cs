@@ -1,7 +1,9 @@
 ﻿using IngressoMVC.Data;
 using IngressoMVC.Models;
 using IngressoMVC.Models.ViewModels.RequestDTO;
+using IngressoMVC.Models.ViewModels.ResponseDTO;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
 namespace IngressoMVC.Controllers
@@ -17,7 +19,25 @@ namespace IngressoMVC.Controllers
 
         public IActionResult Index() => View(_context.Filmes);
 
-        public IActionResult Detalhes(int id) => View(_context.Filmes.Find(id));
+        public IActionResult Detalhes(int id) 
+        {
+            var resultado = _context.Filmes.FirstOrDefault(filme => filme.Id == id);
+
+            if (resultado == null)
+                return View("NotFound");
+
+            GetFilmeDto filmeDto = new GetFilmeDto()
+            {
+                Id = resultado.Id,
+                Titulo = resultado.Titulo,
+                Descricao = resultado.Descricao,
+                Preco = resultado.Preco,
+                ImageURL = resultado.ImageURL,
+                FotoURLCinema = _context.Cinemas.FirstOrDefault(x => x.Id == resultado.CinemaId).LogoURL
+            };   
+
+            return View(filmeDto);
+        }
 
         public IActionResult Criar() => View();
 
@@ -37,16 +57,11 @@ namespace IngressoMVC.Controllers
             _context.Add(filme);
             _context.SaveChanges();
 
-            foreach (var categoria in filmeDto.Categorias)
+            foreach (var cateId in filmeDto.CategoriasId)
             {
-                int? categoriaId = _context.Categorias.Where(c => c.Nome == categoria).FirstOrDefault().Id;
-
-                if (categoriaId != null)
-                {
-                    var novaCategoria = new FilmeCategoria(filme.Id, categoriaId.Value);
-                    _context.FilmesCategorias.Add(novaCategoria);
-                    _context.SaveChanges();
-                }
+                var Novacate = new FilmeCategoria(cateId, filme.Id);
+                _context.FilmesCategorias.Add(Novacate);
+                _context.SaveChanges();
             }
 
             foreach (var atorId in filmeDto.AtoresId)

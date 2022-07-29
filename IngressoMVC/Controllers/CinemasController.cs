@@ -1,6 +1,7 @@
 ﻿using IngressoMVC.Data;
 using IngressoMVC.Models;
 using IngressoMVC.Models.ViewModels.RequestDTO;
+using IngressoMVC.Models.ViewModels.ResponseDTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
@@ -29,6 +30,13 @@ namespace IngressoMVC.Controllers
 
             if (cinema == null)
                 return View("NotFound");
+            GetCinemaDto cinemaDto = new GetCinemaDto()
+            {
+                Nome = cinema.Nome,
+                Descricao = cinema.Descricao,
+                LogoURL = cinema.LogoURL,
+                FotoFilme = cinema.Filmes.FirstOrDefault(x => x.Id == cinema.Id).ImageURL
+            };
 
             return View(cinema);
         }

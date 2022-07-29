@@ -1,6 +1,7 @@
 ﻿using IngressoMVC.Data;
 using IngressoMVC.Models;
 using IngressoMVC.Models.ViewModels.RequestDTO;
+using IngressoMVC.Models.ViewModels.ResponseDTO;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 
@@ -17,7 +18,21 @@ namespace IngressoMVC.Controllers
 
         public IActionResult Index() => View(_context.Categorias);
 
-        public IActionResult Detalhes(int id) => View(_context.Categorias.Find(id));
+        public IActionResult Detalhes(int id) 
+        {
+            var resultado = _context.Categorias.FirstOrDefault(ator => ator.Id == id);
+            if (resultado == null)
+                return View("NotFound");
+
+            GetCategoriaDto categoriaDto = new GetCategoriaDto()
+            {
+                Id = resultado.Id,
+                Nome = resultado.Nome,
+                
+            };
+
+            return View(categoriaDto);
+        }
 
         public IActionResult Criar() => View();
 
@@ -33,11 +48,11 @@ namespace IngressoMVC.Controllers
 
         public IActionResult Atualizar(int? id)
         {
-            if (id == null) return NotFound();
+            if (id == null) return View("NotFound");
 
             var result = _context.Categorias.FirstOrDefault(a => a.Id == id);
 
-            if (result == null) return View();          
+            if (result == null) return View("NotFound");          
             
             return View(result);
         }
@@ -59,7 +74,7 @@ namespace IngressoMVC.Controllers
         public IActionResult Deletar(int id)
         {
             var result = _context.Categorias.FirstOrDefault(a => a.Id == id);
-            if (result == null) return View();
+            if (result == null) return View("NotFound");
             return View(result);
         }
 
