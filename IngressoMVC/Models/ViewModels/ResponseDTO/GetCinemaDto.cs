@@ -19,6 +19,6 @@ namespace IngressoMVC.Models.ViewModels.ResponseDTO
         public string LogoURL { get; set; }
 
 
-        public string FotoFilme { get; set; }
+        public List<string> FotoFilme { get; set; }
     }
 }

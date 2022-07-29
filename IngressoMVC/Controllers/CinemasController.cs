@@ -35,10 +35,9 @@ namespace IngressoMVC.Controllers
                 Nome = cinema.Nome,
                 Descricao = cinema.Descricao,
                 LogoURL = cinema.LogoURL,
-                FotoFilme = cinema.Filmes.FirstOrDefault(x => x.Id == cinema.Id).ImageURL
+                FotoFilme = cinema.Filmes.Select(x => x.ImageURL).ToList()
             };
-
-            return View(cinema);
+            return View(cinemaDto);
         }
 
         public IActionResult Criar()
